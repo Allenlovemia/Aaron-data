@@ -1,0 +1,84 @@
+---
+title: "Aaron data"
+author: "Yingmai Chen"
+date: "2024-04-09"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+```
+```{r}
+data <- read_excel("injuries.xlsx")
+```
+
+```{r}
+# Count unique values for categorical variables
+sapply(data, function(x) if(is.factor(x) | is.character(x)) length(unique(x)) else NA)
+```
+```{r}
+# Count injuries by sport
+data %>%
+  group_by(Sport) %>%
+  summarise(Injury_Count = n())
+
+```
+```{r}
+# Common injury types
+data %>%
+  group_by(Injury_or_Illness_Code) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+# Affected body parts
+data %>%
+  group_by(Bodypart_or_System_Code) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+```
+
+```{r}
+# Plot the distribution of injuries across different sports
+ggplot(data, aes(x = Sport)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(title = "Distribution of Injuries Across Different Sports", x = "Sport", y = "Count")
+
+
+```
+```{r}
+# Convert Year to a factor for better plotting
+data$Year <- as.factor(data$Year)
+
+ggplot(data, aes(x = Year)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(title = "Trend of Injuries Over the Years", x = "Year", y = "Count")
+
+```
+```{r}
+# Assuming 'Injury_or_Illness_Code' represents different types of injuries
+ggplot(data, aes(x = Injury_or_Illness_Code)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(title = "Common Injury Types", x = "Injury Code", y = "Count")
+
+```
+```{r}
+# Assuming 'TimeLoss' represents the days lost due to injury
+ggplot(data, aes(x = TimeLoss)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black") +
+  theme_minimal() +
+  labs(title = "Impact of Injuries (Time Loss)", x = "Time Lost (Days)", y = "Count")
+
+```
+
+
