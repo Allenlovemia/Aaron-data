@@ -80,5 +80,21 @@ ggplot(data, aes(x = TimeLoss)) +
   labs(title = "Impact of Injuries (Time Loss)", x = "Time Lost (Days)", y = "Count")
 
 ```
+```{r}
+# Creating a contingency table for Sport vs. Surgery
+table_sport_surgery <- table(data$Sport, data$Surgery)
+
+# Viewing the contingency table
+table_sport_surgery
+
+```
+```{r}
+# Bar plot to show the relationship between Sport and Surgery
+ggplot(data, aes(x = Sport, fill = as.factor(Surgery))) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Relationship Between Sport and Surgery", x = "Sport", y = "Proportion", fill = "Surgery")
+
+```
 
 
